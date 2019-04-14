@@ -1,0 +1,133 @@
+<div class="container">
+  <h1 align="center">Cadastro Pessoal</h1>
+  <h2> <i class="fa fa-plus-circle"></i> Formulario de Cadastro</h2>
+  <form #cadastro="ngForm" (submit)="salvar(cadastro)">
+    <div class="form-group">
+      <label for="nome">Nome</label>
+      <input type="text" id="nome" name="nome" [(ngModel)]="nome" class="form-control form-control-lg"
+        #campo_titulo="ngModel" required minlength="3" maxlength="140" appTituloUnicoValidator
+        [class.is-invalid]="campo_titulo.invalid && (campo_titulo.dirty || campo_titulo.touched)">
+      <div *ngIf="campo_titulo.invalid && (campo_titulo.dirty || campo_titulo.touched)" class="invalid-feedback">
+        <span *ngIf="campo_titulo.errors.required">
+          O nome é um campo obrigatório.
+        </span>
+        <span *ngIf="campo_titulo.errors.minlength">
+          O título precisa ter, pelo menos, 3 caracteres.
+        </span>
+        <span *ngIf="campo_titulo.errors.maxlength">
+          O título deve ter, no máximo, 140 caracteres.
+        </span>
+        <span *ngIf="campo_titulo.errors.tituloUnico">
+          Já existe um nome registrado.
+        </span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="idade">Idade</label>
+     <input type="number" id="idade" name="idade" [(ngModel)]="idade" class="form-control"
+        #campo_conteudo="ngModel" required
+        [class.is-invalid]="campo_conteudo.invalid && (campo_conteudo.dirty || campo_conteudo.touched)">
+      <div *ngIf="campo_conteudo.invalid && (campo_conteudo.dirty || campo_conteudo.touched)" class="invalid-feedback">
+        <span *ngIf="campo_conteudo.errors.required">
+          O campo idade obrigatório.
+        </span>
+      </div>
+    </div>
+      <!--Sexo-->
+    <div class="form-group">
+      <label for="sexo">Sexo:</label>
+      <br/>
+      <div class="form-check-inline">
+        <label class="form-check-label">
+          <input type="radio" id="sexo" name="sexo" value="Masculino" [(ngModel)]="sexo" class="form-check-input" required
+          #campo_sexo="ngModel" [class.is-invalid]="campo_sexo.invalid && (campo_sexo.dirty || campo_sexo.touched)"/> Masculino
+        </label>
+      </div>
+      <div class="form-check-inline">
+        <label class="form-check-label">
+          <input type="radio" id="sexo" name="sexo" value="Feminino" [(ngModel)]="sexo" class="form-check-input"
+          #campo_sexo="ngModel" [class.is-invalid]="campo_sexo.invalid && (campo_sexo.dirty || campo_sexo.touched)"/> Feminino
+        </label>
+      </div>
+      <div *ngIf="campo_sexo.invalid && (campo_sexo.dirty || campo_sexo.touched)" class="invalid-feedback">
+        <span *ngIf="campo_sexo.errors.required">
+          O sexo é obrigatório.
+        </span>
+      </div>
+      <br/>
+    </div>              
+   
+    <div class="form-group">
+      <label for="cidade">Cidade</label>
+      <select class="form-control" id="cidade" name="cidade" [(ngModel)]="cidade" required>
+        <option value="Palmas">Palmas</option>
+        <option value="Miranorte">Miranorte</option>
+        <option value="Porto Nacional">Porto Nacional</option>
+        <option value="Luzimangues">Luzimangues</option>        
+      </select>
+    </div>
+    <div>
+      <button type="submit" class="btn btn-primary" [disabled]="!cadastro.form.valid">Salvar</button>
+      <button type="reset" class="btn btn-secondary" formnovalidate>Limpar</button>
+    </div>
+  </form>
+  <br>
+  <div>
+    <h3>Estatística geral</h3>
+    <table class="table">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">Nome da pessoa mais velha</th>
+          <th scope="col">Nome da pessoa mais nova</th>
+          <th scope="col">Media de idade Masculina</th>
+          <th scope="col">Media de idade Feminina</th> 
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{ questionario.pessoaMaisVelha()?.nome}}</td>
+          <td>{{ questionario.pessoaMaisNova()?.nome}}</td>
+          <td>{{questionario.mediaGeral().media_idade_homens}}%</td>
+          <td>{{questionario.mediaGeral().media_idade_mulheres}}%</td>
+        
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div>
+    <h3>Estatística de media por cidade</h3>
+    <table class="table">
+      <thead class="thead-dark">
+        <tr>
+          <th>Nome da Cidade</th>
+          <th>Media</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let estatistica of questionario.estatisticasPessoas()">
+          <td>{{ estatistica.nome }}</td>
+          <td>{{ estatistica.media }}%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+    <div>
+    <h3>Estatística de idade por cidade</h3>
+    <table class="table">
+      <thead class="thead-dark">
+        <tr>
+          <th>Nome da Cidade</th>
+          <th>Homens</th>
+          <th>Mulheres</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let estatistica of questionario.estatisticasPessoas()">
+          <td>{{ estatistica.nome }}</td>
+          <td>{{ estatistica.porcenth }}%</td>
+          <td>{{ estatistica.porcentm }}%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
